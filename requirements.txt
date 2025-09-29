@@ -1,0 +1,2 @@
+apscheduler==4.0.0a6
+gql[all]
