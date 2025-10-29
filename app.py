@@ -64,23 +64,33 @@ def send_status_email():
         smtp.send_message(msg)
 
 
-def update_root(email):
-    query = gql(
+def update_root(emails, date):
+    if not emails:
+        print("No emails to update")
+        return
+
+    try:
+        date_str = date.strftime("%Y-%m-%d")
+        mutation = gql(
+            """
+            mutation MarkStatusUpdate($emails: [String!]!, $date: NaiveDate!) {
+                markStatusUpdate(emails: $emails, date: $date) {
+                    isSent
+                }
+            }
         """
-    mutation MarkStatusUpdate($email: String!) {
-          markStatusUpdate(email: $email) {
-            isUpdated
-          }
-        }
-    """
-    )
-    params = {"email": email}
-    gql_client.execute(mutation, variable_values=params)
+        )
+
+        params = {"emails": emails, "date": date_str}
+        print(f"Sending GraphQL Mutation with params: {params}")
+        result = gql_client.execute(mutation, variable_values=params)
+    except Exception as e:
+        print(f"Error updating ROOT: {e}")
 
 
 def fetch_updates():
     M.login(USERNAME, APP_PASSWORD)
-    yesterday = datetime.today() - timedelta(0)
+    yesterday = datetime.today() - timedelta(days=1)
     yesterday_str = yesterday.strftime("%d-%m-%Y")
 
     M.select("INBOX")
@@ -88,6 +98,7 @@ def fetch_updates():
     status, data = M.search(None, f'(SUBJECT "{subj}")')
     mail_ids = data[0].split()
 
+    emails = []
     for num in mail_ids:
         status, msg_data = M.fetch(num, "(RFC822)")
         if status != "OK":
@@ -96,9 +107,12 @@ def fetch_updates():
 
         raw_msg = msg_data[0][1]
         msg = email.message_from_bytes(raw_msg)["From"]
-        email = re.search(r"<(.*)>", msg)
+        match = re.search(r"<(.*?)>", msg)
 
-        update_root(email)
+        if match:
+            emails.append(match.group(1))
+
+    update_root(emails, yesterday)
 
     M.logout()
 
