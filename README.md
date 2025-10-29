@@ -1,7 +1,7 @@
 # statusD
 
 An automated daemon for managing daily status updates in the amFOSS club.
-`statusD` sends daily reminder emails and tracks member responses through email, integrating with the [root](github.com/amfoss/root) API for status tracking.
+`statusD` sends daily reminder emails and tracks member responses through email, integrating with the [root](https://github.com/amfoss/root) API for status tracking.
 
 ---
 
