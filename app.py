@@ -21,7 +21,6 @@ USERNAME = os.environ["STATUSD_EMAIL"]
 APP_PASSWORD = os.environ["STATUSD_APP_PASSWORD"]
 MAILING_LIST = os.environ["STATUSD_MAILING_LIST"]
 
-M = imaplib.IMAP4_SSL(IMAP_HOST, IMAP_PORT)
 transport = AIOHTTPTransport(url=ROOT_URL)
 gql_client = Client(transport=transport)
 
@@ -89,7 +88,9 @@ def update_root(emails, date):
 
 
 def fetch_updates():
+    M = imaplib.IMAP4_SSL(IMAP_HOST, IMAP_PORT)
     M.login(USERNAME, APP_PASSWORD)
+
     yesterday = datetime.today() - timedelta(days=1)
     yesterday_str = yesterday.strftime("%d-%m-%Y")
 
