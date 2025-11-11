@@ -121,6 +121,6 @@ def fetch_updates():
 if __name__ == "__main__":
     scheduler = Scheduler()
     print("StatusD Online!")
-    scheduler.add_schedule(fetch_updates, CronTrigger(hour=5))
+    scheduler.add_schedule(fetch_updates, CronTrigger(hour=6, minute=30))
     scheduler.add_schedule(send_status_email, CronTrigger(hour=18))
     scheduler.run_until_stopped()
