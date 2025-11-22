@@ -20,8 +20,12 @@ ROOT_URL = "https://root.amfoss.in/"
 USERNAME = os.environ["STATUSD_EMAIL"]
 APP_PASSWORD = os.environ["STATUSD_APP_PASSWORD"]
 MAILING_LIST = os.environ["STATUSD_MAILING_LIST"]
+API_KEY = os.environ["STATUSD_API_KEY"]
 
-transport = AIOHTTPTransport(url=ROOT_URL)
+transport = AIOHTTPTransport(
+    url=ROOT_URL,
+    headers={"Authorization": f"Bearer {API_KEY}"}
+)
 gql_client = Client(transport=transport)
 
 status_update_template = """Namah Shivaya,
