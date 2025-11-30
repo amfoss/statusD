@@ -10,7 +10,7 @@ An automated daemon for managing daily status updates in the amFOSS club.
 `statusD` automates the status update workflow by:
 
 - Sending daily reminder emails to the mailing list at **18:00 (6 PM)** with the status update template
-- Fetching email responses to the thread at **05:00 (5 AM)** the next day  
+- Fetching email responses to the thread at **06:30 (6:30 AM)** the next day  
 - Updating root with members who submitted their status updates  
 
 
